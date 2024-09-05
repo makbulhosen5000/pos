@@ -4,13 +4,10 @@ namespace App\Helper;
 use Exception;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use PhpParser\Node\Stmt\TryCatch;
-
-use function PHPSTORM_META\type;
 
  class JWTToken
  {
-    function createToken($userEmail):string{
+    public static function createToken($userEmail):string{
         $key = env('JWT_KEY');
         $payload = [
             'iss'       => 'laravel-token', // issue name
@@ -24,7 +21,7 @@ use function PHPSTORM_META\type;
 
     }
 
-    function verifyToken($token):string{
+    public static function verifyToken($token):string{
         try {
             $key = env('JWT_KEY');
             $decode = JWT::decode($token, new Key($key,'HS256'));
