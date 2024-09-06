@@ -13,10 +13,9 @@ use Illuminate\Support\Facades\Mail;
 class UserController extends Controller
 {
     /**
-     * user registration by create()
+     * user registration function
      */
-    public function userRegistration(Request $request)
-    {
+    public function userRegistration(Request $request){
        try {
         User::create([
             'first_name'       => $request->input('first_name'),
@@ -34,12 +33,12 @@ class UserController extends Controller
         return response()->json([
             'status'  =>  'failed',
             'message' => 'User Registration Failed'
-        ]);
+        ],401);
        }
 
     }
      /**
-     * user login by create()
+     * user login function
      */
     public function userLogin(Request $request){
         $count = User::where('email', '=', $request->input('email'))
@@ -52,16 +51,19 @@ class UserController extends Controller
             'status'  =>  'success',
             'message' => "User login successful",
             'token' => $token
-        ],200);
+        ],401);
         }else{
             return response()->json([
                 'status'  =>  'failed',
                 'message' => 'Unauthorized'
-            ],200);
+            ],401);
         }
     
     }
-    public function sentOtpCode(Request $request){
+      /**
+     * otp send function
+     */
+    public function sentOTP(Request $request){
         $email = $request->input('email');
         $otp = rand(1000,9999);
         $count = User::where('email', '=', $email)->count();
@@ -79,7 +81,53 @@ class UserController extends Controller
             return response()->json([
                 'status'  =>  'failed',
                 'message' => 'Unauthorized'
-            ],200);
+            ],401);
         }
     }
+       /**
+     * otp verification function
+     */
+
+    public function verifyOTP(Request $request){
+        $email = $request->input('email');
+        $otp = $request->input('otp');
+        $count = User::where('email','=',$email)->where('otp','=',$otp)->count();
+
+        if($count == 1){
+             //otp update in database
+             User::where('email','=',$email)->update(['otp'=>0]);
+             //user password reset token issue
+             $token = JWTToken::createTokenForSetPassword($request->input('email'));
+             return response()->json([
+              'status'  =>  'success',
+              'message' => "OTP verification successful",
+              'token' => $token
+          ],200);
+        }else{
+            return response()->json([
+                'status'  =>  'failed',
+                'message' => 'Unauthorized'
+            ],401);
+        }
+    }
+      /**
+     * Reset password function
+     */
+    function resetPassword(Request $request){
+        try{
+            $email = $request->header('email');
+            $password = $request->header('password');
+            User::where('email','=',$email)->update(['password'=>$password]);
+            return response()->json([
+            'status'  =>  'success',
+            'message' => 'Password reset successfully'
+        ],200);
+        }catch(Exception $e){
+            return response()->json([
+                'status'  =>  'fail',
+                'message' => 'Something went wrong'
+            ],401);
+        }
+    }
+
 }
