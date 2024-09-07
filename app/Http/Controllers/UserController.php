@@ -116,11 +116,11 @@ class UserController extends Controller
     function resetPassword(Request $request){
         try{
             $email = $request->header('email');
-            $password = $request->header('password');
+            $password = $request->input('password');
             User::where('email','=',$email)->update(['password'=>$password]);
             return response()->json([
             'status'  =>  'success',
-            'message' => 'Password reset successfully'
+            'message' => 'Password reset request successfully'
         ],200);
         }catch(Exception $e){
             return response()->json([
