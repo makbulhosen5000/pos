@@ -12,8 +12,31 @@ use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
+
+    public function loginPage(){
+        return view('pages.auth.login-page');
+    }
+    public function registrationPage(){
+        return view('pages.auth.registration-page');
+    }
+    public function sentOTPPage(){
+        return view('pages.auth.sent-otp-page');
+    }
+    public function verifyOTPPage(){
+        return view('pages.auth.verify-otp-page');
+    }
+    public function resetPasswordPage(){
+        return view('pages.auth.reset-password-page');
+    }
+    public function dashboardPage(){
+        return view('pages.auth.dashboard');
+    }
+
+    
     /**
-     * user registration function
+     * backend  function start from here
+     * 
+     *  user registration function
      */
     public function userRegistration(Request $request){
        try {
@@ -129,5 +152,8 @@ class UserController extends Controller
             ],401);
         }
     }
+
+  
+    
 
 }
