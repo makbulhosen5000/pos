@@ -29,7 +29,7 @@ class UserController extends Controller
         return view('pages.auth.reset-password-page');
     }
     public function dashboardPage(){
-        return view('pages.auth.dashboard');
+        return view('pages.dashboard.profile-page');
     }
 
     
@@ -72,9 +72,8 @@ class UserController extends Controller
            $token = JWTToken::createToken($request->input('email'));
            return response()->json([
             'status'  =>  'success',
-            'message' => "User login successful",
-            'token' => $token
-        ],401);
+            'message' => "User login successful"
+        ],200)->cookie( 'token',$token,60*24*30);
         }else{
             return response()->json([
                 'status'  =>  'failed',
