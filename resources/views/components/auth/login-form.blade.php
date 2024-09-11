@@ -48,31 +48,4 @@
   }
 
 
-
-
-
-//   async function SubmitLogin() {
-//             let email=document.getElementById('email').value;
-//             let password=document.getElementById('password').value;
-
-//             if(email.length===0){
-//                 errorToast("Email is required");
-//             }
-//             else if(password.length===0){
-//                 errorToast("Password is required");
-//             }
-//             else{
-//                 showLoader();
-//                 let res=await axios.post("/user-login",{email:email, password:password});
-//                 hideLoader()
-//                 if(res.status===200 && res.data['status']==='success'){
-//                     setToken(res.data['token'])
-//                     window.location.href="/userProfile";
-//                 }
-//                 else{
-//                     errorToast(res.data['message']);
-//                 }
-//             }
-//     }
-
 </script>
